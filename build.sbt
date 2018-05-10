@@ -202,8 +202,12 @@ lazy val `play-jsonJS` = `play-json`.js
 
 lazy val `play-functional` = crossProject.crossType(CrossType.Pure)
   .in(file("play-functional"))
-  .settings(commonSettings)
-  .settings(playJsonMimaSettings)
+  .settings(commonSettings ++ playJsonMimaSettings ++ Seq(
+    mimaBinaryIssueFilters ++= Seq(
+      ProblemFilters.exclude[ReversedMissingMethodProblem](
+        "play.api.libs.functional.Applicative.pure")
+    )
+  ))
   .enablePlugins(PlayLibrary)
 
 lazy val `play-functionalJVM` = `play-functional`.jvm
